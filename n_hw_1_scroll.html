@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <link href="css/styles.css" rel="stylesheet" />
+    <style>
+      .content {
+        height: 300px;
+        overflow: auto;
+      }
+    </style>
+    <script src="js/vue.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="sample">
+        <form v-if="!formDone" @submit.prevent="sendData()">
+          <div class="content alert alert-info">
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+            <p>
+              This text no one reads. This text no one reads. This text no one
+              reads.
+            </p>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="false"
+                v-model="checked"
+                @click="changeChecked"
+                name="agree"
+              />
+              Agree all {{ checked }}
+            </label>
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                value="checked2"
+                v-model="checked2"
+                name="spam"
+              />
+              Get spam {{ checked2 }}
+            </label>
+            <div class="hide" :style="showRadio">
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    value="email"
+                    name="radio_type"
+                    v-model="spamType"
+                  />
+                  Email
+                </label>
+              </div>
+              <div class="form-check">
+                <label class="form-check-label">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    value="phone"
+                    name="radio_type"
+                    v-model="spamType"
+                    checked
+                  />
+                  Phone
+                </label>
+                {{ checked2 }}
+              </div>
+            </div>
+          </div>
+
+          <hr />
+          <button
+            class="btn btn-primary"
+            :disabled="changeChecked"
+            @click="hundlerButton"
+          >
+            Send Data
+          </button>
+        </form>
+        <div v-else>
+          <table class="table table-bordered">
+            <tr>
+              <td>Agree all</td>
+              <td :class="checkedClassess">{{ checked }}</td>
+            </tr>
+            <tr>
+              <td>Get spam</td>
+              <td :class="checked2Classess">{{ checked2 }}</td>
+            </tr>
+            <tr>
+              <td>Spam type</td>
+              <td>{{ spamType }}</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script>
+      Vue.createApp({
+        data: () => ({
+          formDone: false,
+          checked: false,
+          checked2: false,
+          spamType: "phone",
+        }),
+        computed: {
+          changeChecked() {
+            return this.checked === false ? true : false;
+          },
+          showRadio() {
+            return this.checked2 === true ? "display: block" : "display: none";
+          },
+          checkedClassess() {
+            return {
+              "text-danger": this.checked === "No",
+              "text-success": this.checked === "Yes",
+            };
+          },
+          checked2Classess() {
+            return {
+              "text-danger": this.checked2 === "No",
+              "text-success": this.checked2 === "Yes",
+            };
+          },
+        },
+        methods: {
+          sendData() {
+            this.formDone = true;
+          },
+          hundlerButton() {
+            this.checked === false
+              ? (this.checked = "No")
+              : (this.checked = "Yes");
+            this.checked2 === false
+              ? (this.checked2 = "No")
+              : (this.checked2 = "Yes");
+          },
+        },
+      }).mount(".sample");
+    </script>
+  </body>
+</html>
