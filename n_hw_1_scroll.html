@@ -19,7 +19,7 @@
     <div class="wrapper">
       <div class="sample">
         <form v-if="!formDone" @submit.prevent="sendData()">
-          <div class="content alert alert-info">
+          <div class="content alert alert-info" @scroll="onScroll">
             <p>
               This text no one reads. This text no one reads. This text no one
               reads.
@@ -101,68 +101,71 @@
               reads.
             </p>
           </div>
-          <div class="form-check">
-            <label class="form-check-label">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value="false"
-                v-model="checked"
-                @click="changeChecked"
-                name="agree"
-              />
-              Agree all {{ checked }}
-            </label>
+          <div class="progress mb-3">
+            <div class="progress-bar" :style="progressStyles"></div>
           </div>
-          <div class="form-check">
-            <label class="form-check-label">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                value="checked2"
-                v-model="checked2"
-                name="spam"
-              />
-              Get spam {{ checked2 }}
-            </label>
-            <div class="hide" :style="showRadio">
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    value="email"
-                    name="radio_type"
-                    v-model="spamType"
-                  />
-                  Email
-                </label>
-              </div>
-              <div class="form-check">
-                <label class="form-check-label">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    value="phone"
-                    name="radio_type"
-                    v-model="spamType"
-                    checked
-                  />
-                  Phone
-                </label>
-                {{ checked2 }}
+          <template v-if="scrollDone">
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value="false"
+                  v-model="checked"
+                  @click="changeChecked"
+                />
+                Agree all {{ checked }}
+              </label>
+            </div>
+            <div class="form-check">
+              <label class="form-check-label">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  value="checked2"
+                  v-model="checked2"
+                />
+                Get spam {{ checked2 }}
+              </label>
+              <div class="hide" :style="showRadio">
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="email"
+                      name="radio_type"
+                      v-model="spamType"
+                    />
+                    Email
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input
+                      class="form-check-input"
+                      type="radio"
+                      value="phone"
+                      name="radio_type"
+                      v-model="spamType"
+                      checked
+                    />
+                    Phone
+                  </label>
+                  {{ checked2 }}
+                </div>
               </div>
             </div>
-          </div>
 
-          <hr />
-          <button
-            class="btn btn-primary"
-            :disabled="changeChecked"
-            @click="hundlerButton"
-          >
-            Send Data
-          </button>
+            <hr />
+            <button
+              class="btn btn-primary"
+              :disabled="changeChecked"
+              @click="hundlerButton"
+            >
+              Send Data
+            </button>
+          </template>
         </form>
         <div v-else>
           <table class="table table-bordered">
@@ -174,7 +177,7 @@
               <td>Get spam</td>
               <td :class="checked2Classess">{{ checked2 }}</td>
             </tr>
-            <tr>
+            <tr v-if="checked2 ==='Yes'">
               <td>Spam type</td>
               <td>{{ spamType }}</td>
             </tr>
@@ -185,12 +188,19 @@
     <script>
       Vue.createApp({
         data: () => ({
+          scrollValue: 0,
           formDone: false,
           checked: false,
           checked2: false,
           spamType: "phone",
         }),
         computed: {
+          progressStyles() {
+            return { width: this.scrollValue * 100 + "%" };
+          },
+          scrollDone() {
+            return this.scrollValue > 0.99;
+          },
           changeChecked() {
             return this.checked === false ? true : false;
           },
@@ -211,6 +221,14 @@
           },
         },
         methods: {
+          onScroll(e) {
+            console.log(e.target);
+            let el = e.target;
+            this.scrollValue = Math.max(
+              this.scrollValue,
+              el.scrollTop / (el.scrollHeight - el.clientHeight)
+            );
+          },
           sendData() {
             this.formDone = true;
           },
